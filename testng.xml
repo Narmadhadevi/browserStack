@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<suite name="ElPais Scrapper Suite" parallel="false">
+    <test name="ElPaisScrapperTests">
+        <classes>
+            <class name="elpais.tests.ElPaisPageTest">
+                            <methods>
+                                <include name="tc1_popUpHandle" />
+                                <include name="tc2_verifyElPaisInSpanish" />
+                               </methods>
+                        </class>
+
+            <class name="elpais.tests.OpinionPageTest">
+                <methods>
+                    <include name="tc2_popUpHandle" />
+                    <include name="tc3_clickOnOpinion" />
+                    <include name="tc4_printFirstFiveTitleAndContent" />
+                </methods>
+            </class>
+
+        </classes>
+    </test>
+
+</suite>
