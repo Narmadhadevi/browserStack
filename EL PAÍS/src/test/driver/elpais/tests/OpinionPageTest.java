@@ -2,6 +2,7 @@ package elpais.tests;
 
 import elpais.base.BaseTest;
 import elpais.pages.OpinionSectionView;
+import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
 import java.util.List;
@@ -31,6 +32,12 @@ public class OpinionPageTest extends BaseTest {
         OpinionSectionView countOfRepeatedWord = new OpinionSectionView(driver);
         List<String> translatedTitles = countOfRepeatedWord.printTranslatedTitlesForFirstFiveArticles();
         countOfRepeatedWord.printRepeatedWordsFromTranslatedTitles(translatedTitles);
+    }
+
+    @Test
+    public void tc7_clickOnOpinionForDevice() {
+        OpinionSectionView clickToOpen = new OpinionSectionView(driver);
+        clickToOpen.clickOpinionOptionDevice();
     }
 
 }

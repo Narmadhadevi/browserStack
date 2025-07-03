@@ -3,6 +3,9 @@ package elpais.pages;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindAll;
+import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
@@ -15,12 +18,18 @@ public class ElPaisInSpanishView {
 
     public ElPaisInSpanishView(WebDriver driver) {
         this.driver = driver;
+        PageFactory.initElements(driver, this);
     }
+
+    @FindAll({@FindBy(xpath = "//a[text()='Accept and continue']"),
+    @FindBy(xpath = "//button[@id='didomi-notice-agree-button']")
+    })
+
+    private WebElement agreeContinue;
 
     public void popUpAccept(){
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
-        WebElement acceptOption = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//span[text()='Accept']")));
-        acceptOption.click();
+        wait.until(ExpectedConditions.elementToBeClickable(agreeContinue)).click();
     }
 
     public void verifyElPaisInSpanish() {

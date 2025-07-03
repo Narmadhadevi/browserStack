@@ -1,54 +1,57 @@
 package elpais.base;
 
-import elpais.utils.WebDriverSetup;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.testng.annotations.*;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
 
 public class BaseTest {
 
     protected static WebDriver driver;
 
-    @Parameters({"executionMode", "browser", "os", "device"})
-    @BeforeSuite
-    public void setupSuite(@Optional("local") String executionMode,
+    @Parameters({"executionMode", "browser", "os","osVersion", "device"})
+    @BeforeClass
+    public void setupSuite(@Optional("browserstack") String executionMode,
                            @Optional("chrome") String browser,
                            @Optional("") String os,
+                           @Optional("") String osVersion,
                            @Optional("") String device) throws MalformedURLException {
 
         if (executionMode.equalsIgnoreCase("browserstack")) {
-            String username = "narmadhadevim_mhKvi4";
-            String accessKey = "pXj6MXrzEY4xFDvmqqHz";
+            String username = "narmadhadevimj_Vfy0dw";
+            String accessKey = "qzokreamcWdjX3zGFK58";
 
             DesiredCapabilities caps = new DesiredCapabilities();
 
+            caps.setCapability("browserName", browser);
+
+            Map<String, Object> bstackOptions = new HashMap<>();
+
             if (device.isEmpty()) {
-                caps.setCapability("browserName", browser);
-                caps.setCapability("os", os);
+                if (!os.isEmpty()) {
+                    bstackOptions.put("os", os);
+                }
+                bstackOptions.put("osVersion", osVersion);
             } else {
-                caps.setCapability("browserName", browser);
-                caps.setCapability("device", device);
-                caps.setCapability("realMobile", true);
+                bstackOptions.put("deviceName", device);
+                bstackOptions.put("realMobile", "true");
             }
 
-            caps.setCapability("project", "ElPais Automation");
-            caps.setCapability("build", "Build 1");
-            caps.setCapability("name", "ElPais Opinion Tests");
+            bstackOptions.put("buildName", "Final Run of Build");
+            bstackOptions.put("sessionName", "ElPais Opinion Tests");
+            bstackOptions.put("projectName", "ElPais Automation");
+            bstackOptions.put("seleniumVersion", "4.20.0");
 
+            caps.setCapability("bstack:options", bstackOptions);
             driver = new RemoteWebDriver(
                     new URL("https://" + username + ":" + accessKey + "@hub.browserstack.com/wd/hub"), caps);
 
-        } else {
-            WebDriverSetup setup = new WebDriverSetup();
-            driver = setup.initializeDriver();
         }
-
-        driver.manage().window().maximize();
         driver.get("https://elpais.com/");
     }
 

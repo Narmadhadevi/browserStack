@@ -1,8 +1,10 @@
 package elpais.pages;
 
 
+import elpais.base.BaseTest;
 import org.json.JSONArray;
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -19,19 +21,33 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class OpinionSectionView {
+public class OpinionSectionView extends BaseTest {
 
     WebDriver driver;
+
 
     public OpinionSectionView(WebDriver driver) {
         this.driver = driver;
     }
 
     public void clickOpinionOption() {
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(15));
         WebElement opinionLink = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//a[@cmp-ltrk='portada_menu'][normalize-space()='Opinión']")));
         opinionLink.click();
     }
+
+
+    public void clickOpinionOptionDevice() {
+
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        WebElement burgerMenu = wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("btn_open_hamburger")));
+        ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", burgerMenu);
+        ((JavascriptExecutor) driver).executeScript("arguments[0].click();", burgerMenu);
+
+    }
+
+
+
 
     public List<String> fetchFirstFiveArticleTitlesWithImages() {
         List<String> titles = new ArrayList<>();
@@ -128,7 +144,6 @@ public class OpinionSectionView {
             conn.setRequestProperty("X-RapidAPI-Host", apiHost);
             conn.setDoOutput(true);
 
-            // Build JSON body
             String jsonBody = String.format(
                     "{\"from\":\"es\", \"to\":\"en\", \"e\":\"\", \"q\":[\"%s\"]}",
                     text.replace("\"", "\\\"") // Escape quotes inside text
